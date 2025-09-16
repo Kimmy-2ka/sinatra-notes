@@ -1,0 +1,11 @@
+<h1>メモアプリ</h1>
+<h2><%= escape(@note["note_title"]) %></h2>
+<pre><%= escape(@note["content"]) %></pre>
+
+<div class="container">
+  <a href="/notes/<%= @note["id"] %>/edit" class="btn">編集</a>
+  <form method='POST' action='/notes/<%= @note["id"] %>'>
+    <input type="hidden" id="_method" name="_method" value="DELETE">
+    <button type='submit' class="btn">削除</button>
+  </form>
+</div>

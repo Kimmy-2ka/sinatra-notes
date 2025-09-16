@@ -1,0 +1,19 @@
+<h1>メモアプリ</h1>
+<form action="/notes/<%= @note["id"] %>" method="post">
+  <input type="hidden" name="_method" value="PATCH">
+  <div>
+    <label>
+      題名<br>
+      <input type="text" name="note_title" value="<%= escape(@note["note_title"]) %>">
+    </label>
+  </div>
+  <div>
+    <label>
+      本文<br>
+      <textarea name="content"><%= escape(@note["content"]) %></textarea>
+    </label>
+  </div>
+  <div>
+    <button type="submit" class="btn">保存</button>
+  </div>
+</form>

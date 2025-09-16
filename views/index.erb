@@ -1,0 +1,9 @@
+<h1 class="title">メモアプリ</h1><a href="/notes/new" class="btn">新規投稿</a>
+<br>
+<ul>
+  <% @notes.each do |f| %>
+    <% if f["delete"] == false %>
+      <li><a href="/notes/<%= f["id"] %>" class="note-link"><%= escape(f["note_title"]) %></a></li>
+    <% end %>
+  <% end %>
+</ul>
