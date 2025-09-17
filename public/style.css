@@ -1,0 +1,62 @@
+.btn {
+  all: unset;
+  background-color: #7fd9d2;
+  color: white;
+  font-size: 16px;
+  width: 100px;
+  height: 40px;
+  border-radius: 8px;
+  margin: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.container {
+  display: flex;
+}
+
+.note-link {
+  color: #7fd9d2;
+  text-decoration: none;
+}
+
+h1 {
+  display: inline-block;
+  margin-right: 20px;
+  vertical-align: middle;
+  color: #7fd9d2;
+}
+
+h2 {
+  border-bottom: 2px solid #7fd9d2;
+}
+
+pre {
+  font-size: 1.2rem;
+  line-height: 1.7;
+}
+
+ul {
+  font-size: 1.3rem;
+  list-style: none;
+  padding-left: 0;
+}
+
+li {
+  background: #e6f0f0;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+input[type="text"],
+textarea {
+  width: 100%;
+  padding: 0.5em;
+  max-width: 400px;
+}
+
+textarea {
+  height: 8em;
+}
