@@ -1,16 +1,16 @@
 <h1>メモアプリ</h1>
-<form action="/notes/<%= @note[:id] %>" method="post">
+<form action="/notes/<%= @note.id %>" method="post">
   <input type="hidden" name="_method" value="PATCH">
   <div>
     <label>
       題名<br>
-      <input type="text" name="title" value="<%= escape(@note[:title]) %>">
+      <input type="text" name="title" value="<%= escape(@note.title) %>">
     </label>
   </div>
   <div>
     <label>
       本文<br>
-      <textarea name="content"><%= escape(@note[:content]) %></textarea>
+      <textarea name="content"><%= escape(@note.content) %></textarea>
     </label>
   </div>
   <div>

@@ -6,6 +6,13 @@ require 'sinatra/reloader'
 # Description of Note class
 # JSONファイルの読込・保存・追加・編集・削除する機能を有する。
 class Note
+  attr_reader :id, :title, :content
+  def initialize(target_note)
+    @id = target_note[:id]
+    @title = target_note[:title]
+    @content = target_note[:content]
+  end
+
   def self.load
     JSON.parse(File.read('notes.json'), symbolize_names: true)
   end
@@ -27,7 +34,8 @@ class Note
   end
 
   def self.find(id)
-    load.find { |note| note[:id] == id }
+    target_note = visible_notes.find { |note| note[:id] == id.to_i }
+    Note.new(target_note) if target_note
   end
 
   def self.edit(title, content, id)
@@ -83,9 +91,9 @@ post '/notes' do
 end
 
 get '/notes/:id' do
-  @note = Note.find(params[:id].to_i)
-  if @note && !@note[:delete]
-    @title = @note[:title]
+  @note = Note.find(params[:id])
+  if @note
+    @title = @note.title
     erb :detail
   else
     halt 404
@@ -93,8 +101,8 @@ get '/notes/:id' do
 end
 
 get '/notes/:id/edit' do
-  @note = Note.find(params[:id].to_i)
-  @title = "編集 #{@note[:title]}"
+  @note = Note.find(params[:id])
+  @title = "編集 #{@note.title}"
   erb :edit
 end
 
