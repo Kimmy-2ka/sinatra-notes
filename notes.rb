@@ -16,9 +16,9 @@ class Note
     end
   end
 
-  def self.create(note_title, content)
+  def self.create(title, content)
     notes = load
-    notes << { id: notes.size, note_title: note_title, content: content, delete: false }
+    notes << { id: notes.size, title:, content:, delete: false }
     save(notes)
   end
 
@@ -26,11 +26,11 @@ class Note
     load.find { |note| note['id'] == id }
   end
 
-  def self.edit(note_title, content, id)
+  def self.edit(title, content, id)
     notes =
       load.map do |note|
         if note['id'] == id
-          note.merge('note_title' => note_title, 'content' => content)
+          note.merge('title' => title, 'content' => content)
         else
           note
         end
@@ -74,14 +74,14 @@ get '/notes/new' do
 end
 
 post '/notes' do
-  Note.create(params[:note_title], params[:content])
+  Note.create(params[:title], params[:content])
   redirect '/notes'
 end
 
 get '/notes/:id' do
   @note = Note.find(params[:id].to_i)
   if @note && !@note['delete']
-    @title = @note['note_title']
+    @title = @note['title']
     erb :detail
   else
     halt 404
@@ -90,12 +90,12 @@ end
 
 get '/notes/:id/edit' do
   @note = Note.find(params[:id].to_i)
-  @title = "編集 #{@note['note_title']}"
+  @title = "編集 #{@note['title']}"
   erb :edit
 end
 
 patch '/notes/:id' do
-  Note.edit(params[:note_title], params[:content], params[:id].to_i)
+  Note.edit(params[:title], params[:content], params[:id].to_i)
   redirect '/notes'
 end
 
