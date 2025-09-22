@@ -10,6 +10,10 @@ class Note
     JSON.parse(File.read('notes.json'), symbolize_names: true)
   end
 
+  def self.visible_notes
+    load.select {|note| !note[:delete]}
+  end
+
   def self.save(notes)
     File.open('notes.json', 'w') do |file|
       JSON.dump(notes, file)
@@ -64,7 +68,7 @@ end
 
 get '/notes' do
   @title = 'メモアプリ'
-  @notes = Note.load
+  @notes = Note.visible_notes
   erb :index
 end
 
