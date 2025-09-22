@@ -38,24 +38,24 @@ class Note
     Note.new(target_note) if target_note
   end
 
-  def self.edit(title, content, id)
+  def edit(title, content)
     notes =
-      load.map do |note|
-        if note[:id] == id
+      Note.load.map do |note|
+        if note[:id] == @id
           note.merge(title: title, content: content)
         else
           note
         end
       end
-    save(notes)
+    Note.save(notes)
   end
 
-  def self.delete(id)
+  def delete
     notes =
-      load.map do |note|
-        note[:id] == id ? note.merge(delete: true) : note
+      Note.load.map do |note|
+        note[:id] == @id ? note.merge(delete: true) : note
       end
-    save(notes)
+    Note.save(notes)
   end
 end
 
@@ -107,11 +107,13 @@ get '/notes/:id/edit' do
 end
 
 patch '/notes/:id' do
-  Note.edit(params[:title], params[:content], params[:id].to_i)
+  @note = Note.find(params[:id])
+  @note.edit(params[:title], params[:content])
   redirect '/notes'
 end
 
 delete '/notes/:id' do
-  Note.delete(params[:id].to_i)
+  @note = Note.find(params[:id])
+  @note.delete
   redirect '/notes'
 end
