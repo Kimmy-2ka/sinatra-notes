@@ -7,6 +7,7 @@ require 'sinatra/reloader'
 # JSONファイルの読込・保存・追加・編集・削除する機能を有する。
 class Note
   attr_reader :id, :title, :content
+
   def initialize(target_note)
     @id = target_note[:id]
     @title = target_note[:title]
@@ -18,7 +19,7 @@ class Note
   end
 
   def self.visible_notes
-    load.select {|note| !note[:delete]}
+    load.reject { |note| note[:delete] }
   end
 
   def self.save(notes)
