@@ -2,8 +2,8 @@
 <br>
 <ul>
   <% @notes.each do |f| %>
-    <% if f["delete"] == false %>
-      <li><a href="/notes/<%= f["id"] %>" class="note-link"><%= escape(f["title"]) %></a></li>
+    <% if f[:delete] == false %>
+      <li><a href="/notes/<%= f[:id] %>" class="note-link"><%= escape(f[:title]) %></a></li>
     <% end %>
   <% end %>
 </ul>
