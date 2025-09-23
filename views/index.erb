@@ -1,0 +1,7 @@
+<h1 class="title">メモアプリ</h1><a href="/notes/new" class="btn">新規投稿</a>
+<br>
+<ul>
+  <% @notes.each do |f| %>
+    <li><a href="/notes/<%= f[:id] %>" class="note-link"><%= escape(f[:title]) %></a></li>
+  <% end %>
+</ul>
