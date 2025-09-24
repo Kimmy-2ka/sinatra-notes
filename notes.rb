@@ -17,10 +17,10 @@ CONN = PG.connect(
 class Note
   attr_reader :id, :title, :content
 
-  def initialize(target_note)
-    @id = target_note[:id]
-    @title = target_note[:title]
-    @content = target_note[:content]
+  def initialize(note)
+    @id = note[:id].to_i
+    @title = note[:title]
+    @content = note[:content]
   end
 
   def self.all_notes
