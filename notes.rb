@@ -3,6 +3,14 @@
 require 'sinatra'
 require 'sinatra/reloader'
 require "pg"
+require 'dotenv/load'
+
+CONN = PG.connect(
+  host: ENV['HOST'],
+  dbname: ENV['DBNAME'],
+  user: ENV['DBUSER'],
+  password: ENV['PASSWORD']
+)
 
 # Description of Note class
 # JSONファイルの読込・保存・追加・編集・削除する機能を有する。
