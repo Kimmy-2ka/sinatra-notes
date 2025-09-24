@@ -17,6 +17,35 @@ $ cd sinatra-notes
 $ bundle install
 ```
 
+## Set up database
+
+1. PostgreSQLにログインし、ユーザとデータベースを作成してください。
+   - ユーザ名とデータベース名はデフォルトで設定してありますが、変更可能です。
+
+```
+$ CREATE USER note_app_owner WITH PASSWORD 'my_password';
+$ CREATE DATABASE note_app OWNER note_app_owner;
+$ \c note_app note_app_owner
+```
+2. テーブルを作成してください。
+```
+$ CREATE TABLE notes (
+    id  INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    title  TEXT,
+    content  TEXT
+  );
+```
+
+## Prepare for connecting to database
+
+1. `example.env`をコピーして`.env`ファイルを作成し、データベース設定を行ってください。
+```
+HOST=localhost
+DBNAME=note_app
+DBUSER=note_app_owner
+PASSWORD=my_password
+```
+
 ## Open app
 
 1. ターミナルからアプリを起動してください。
@@ -26,7 +55,7 @@ $ bundle exec ruby notes.rb -p 4567
 ```
 
 2. ブラウザで以下を開いてください。
-   
+
    http://localhost:4567
    (/notes にリダイレクトされます。)
 
@@ -41,8 +70,11 @@ $ bundle exec ruby notes.rb -p 4567
 - メモを削除する
   - 詳細画面の「削除」ボタンを押すと、該当メモがトップページのメモ一覧から削除されます。
 
-## 仕様
+## Specifications
 
-- データは`notes.json`に保存されます。
-- メモは`{id:, note_title:, content:, delete:false}`のハッシュ形式で配列に追加されます。
-- 削除した際はハッシュは削除されずに、`delete`フラグが`true`になります。
+- データはPostgreSQLの`notes`テーブルに保存されます。
+- テーブルは以下の構造です。
+   - `id`: 自動採番される整数のプライマリーキー(INTEGER)
+   - `title`:メモのタイトル(TEXT)
+   - `content`:メモの本文(TEXT)
+- メモを削除した場合、物理的に削除されます。
