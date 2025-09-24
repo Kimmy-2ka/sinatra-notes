@@ -2,6 +2,7 @@
 
 require 'sinatra'
 require 'sinatra/reloader'
+require "pg"
 
 # Description of Note class
 # JSONファイルの読込・保存・追加・編集・削除する機能を有する。
