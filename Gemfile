@@ -3,6 +3,7 @@
 source 'https://rubygems.org'
 
 group :development do
+  gem 'dotenv'
   gem 'erb_lint', require: false
   gem 'rubocop-fjord', require: false
 end
