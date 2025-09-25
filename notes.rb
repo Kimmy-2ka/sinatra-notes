@@ -17,7 +17,7 @@ class Note
   attr_reader :id, :title, :content
 
   def initialize(note)
-    @id = note[:id].to_i
+    @id = note[:id]
     @title = note[:title]
     @content = note[:content]
   end
