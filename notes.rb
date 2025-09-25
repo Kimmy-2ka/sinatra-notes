@@ -5,16 +5,15 @@ require 'sinatra/reloader'
 require 'pg'
 require 'dotenv/load'
 
-CONN = PG.connect(
-  host: ENV['HOST'],
-  dbname: ENV['DBNAME'],
-  user: ENV['DBUSER'],
-  password: ENV['PASSWORD']
-)
-
 # Description of Note class
 # PostgreSQLを用いてデータの読込、新規追加、検索、編集、削除の機能を有する。
 class Note
+  CONN = PG.connect(
+    host: ENV['HOST'],
+    dbname: ENV['DBNAME'],
+    user: ENV['DBUSER'],
+    password: ENV['PASSWORD']
+  )
   attr_reader :id, :title, :content
 
   def initialize(note)
