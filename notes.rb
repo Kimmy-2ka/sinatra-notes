@@ -32,7 +32,7 @@ class Note
   end
 
   def self.find(id)
-    note = CONN.exec_params('SELECT id, title, content From notes Where id=$1', [id.to_i]).first
+    note = CONN.exec_params('SELECT id, title, content From notes Where id=$1 LIMIT 1', [id.to_i]).first
     Note.new(note.transform_keys(&:to_sym)) if note
   end
 
