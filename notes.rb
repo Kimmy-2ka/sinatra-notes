@@ -32,16 +32,16 @@ class Note
   end
 
   def self.find(id)
-    note = CONN.exec_params('SELECT id, title, content From notes Where id=$1 LIMIT 1', [id.to_i]).first
+    note = CONN.exec_params('SELECT id, title, content FROM notes WHERE id = $1 LIMIT 1', [id.to_i]).first
     Note.new(note.transform_keys(&:to_sym)) if note
   end
 
   def edit(title, content)
-    CONN.exec_params('UPDATE notes SET title = $1, content = $2 WHERE id=$3', [title, content, @id])
+    CONN.exec_params('UPDATE notes SET title = $1, content = $2 WHERE id = $3', [title, content, @id])
   end
 
   def delete
-    CONN.exec_params('DELETE FROM notes WHERE id=$1', [@id])
+    CONN.exec_params('DELETE FROM notes WHERE id = $1', [@id])
   end
 end
 
