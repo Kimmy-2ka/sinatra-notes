@@ -2,61 +2,46 @@
 
 require 'sinatra'
 require 'sinatra/reloader'
+require 'pg'
+require 'dotenv/load'
 
 # Description of Note class
-# JSONファイルの読込・保存・追加・編集・削除する機能を有する。
+# PostgreSQLを用いてデータの読込、新規追加、検索、編集、削除の機能を有する。
 class Note
+  CONN = PG.connect(
+    host: ENV['HOST'],
+    dbname: ENV['DBNAME'],
+    user: ENV['DBUSER'],
+    password: ENV['PASSWORD']
+  )
   attr_reader :id, :title, :content
 
-  def initialize(target_note)
-    @id = target_note[:id]
-    @title = target_note[:title]
-    @content = target_note[:content]
+  def initialize(note)
+    @id = note[:id]
+    @title = note[:title]
+    @content = note[:content]
   end
 
-  def self.load
-    JSON.parse(File.read('notes.json'), symbolize_names: true)
-  end
-
-  def self.visible_notes
-    load.reject { |note| note[:delete] }
-  end
-
-  def self.save(notes)
-    File.open('notes.json', 'w') do |file|
-      JSON.dump(notes, file)
-    end
+  def self.all_notes
+    notes = CONN.exec('SELECT id, title, content FROM notes ORDER BY id')
+    notes.map { |note| note.transform_keys(&:to_sym) }
   end
 
   def self.create(title, content)
-    notes = load
-    notes << { id: notes.size, title:, content:, delete: false }
-    save(notes)
+    CONN.exec_params('INSERT INTO notes (title, content) VALUES ($1, $2)', [title, content])
   end
 
   def self.find(id)
-    target_note = visible_notes.find { |note| note[:id] == id.to_i }
-    Note.new(target_note) if target_note
+    note = CONN.exec_params('SELECT id, title, content FROM notes WHERE id = $1 LIMIT 1', [id.to_i]).first
+    Note.new(note.transform_keys(&:to_sym)) if note
   end
 
   def edit(title, content)
-    notes =
-      Note.load.map do |note|
-        if note[:id] == @id
-          note.merge(title: title, content: content)
-        else
-          note
-        end
-      end
-    Note.save(notes)
+    CONN.exec_params('UPDATE notes SET title = $1, content = $2 WHERE id = $3', [title, content, @id])
   end
 
   def delete
-    notes =
-      Note.load.map do |note|
-        note[:id] == @id ? note.merge(delete: true) : note
-      end
-    Note.save(notes)
+    CONN.exec_params('DELETE FROM notes WHERE id = $1', [@id])
   end
 end
 
@@ -77,7 +62,7 @@ end
 
 get '/notes' do
   @title = 'メモアプリ'
-  @notes = Note.visible_notes
+  @notes = Note.all_notes
   erb :index
 end
 
